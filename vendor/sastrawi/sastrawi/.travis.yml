@@ -1,0 +1,24 @@
+language: php
+
+php:
+  - 5.3
+  - 5.4
+  - 5.5
+  - 5.6
+  - hhvm
+
+before_install:
+ - composer install --dev --prefer-source
+ - wget http://get.sensiolabs.org/php-cs-fixer.phar && chmod u+x php-cs-fixer.phar
+
+script:
+ - ant
+
+matrix:
+  fast_finish: true
+  allow_failures:
+    - php: 5.6
+    - php: hhvm
+
+notifications:
+  email: false
