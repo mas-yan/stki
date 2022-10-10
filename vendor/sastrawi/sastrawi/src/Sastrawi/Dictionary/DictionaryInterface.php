@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Sastrawi (https://github.com/sastrawi/sastrawi)
  *

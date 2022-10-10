@@ -42,18 +42,47 @@ $stopword = ["ada", "adalah", "adanya", "adapun", "agak", "agaknya", "agar", "ak
   ?>
   <table border="1">
     <tbody>
-      <?php foreach ($filter as $key => $value) : ?>
+      <?php $no = 1;
+      foreach ($filter as $value) : ?>
         <tr>
-          <td><?= $key + 1 ?></td>
+          <td><?= $no++ ?></td>
           <td><?= $value ?></td>
         </tr>
       <?php endforeach ?>
       <tr>
-        <td>s</td>
-        <td>Jumlah: <?= count($filter) ?> kata</td>
+        <td>total: </td>
+        <td><?= count($filter) ?> kata</td>
       </tr>
     </tbody>
   </table>
 
+  <?php
+  require_once __DIR__ . '/vendor/autoload.php';
+  $stemmerFactory = new \Sastrawi\Stemmer\StemmerFactory();
+
+  $dictionary = $stemmerFactory->createStemmer();
+
+  $kalimat = implode(" ", $filter);
+  $stemmer = $dictionary->stem($kalimat);
+  $stemming = explode(" ", $kalimat);
+  ?>
+  <h3>Stemming</h3>
+  <table border="1">
+    <tbody>
+      <?php $no = 1;
+      foreach ($stemming as $value) : ?>
+        <tr>
+          <td><?= $no++ ?></td>
+          <td><?= $value ?></td>
+        </tr>
+      <?php endforeach ?>
+      <tr>
+        <td>total: </td>
+        <td><?= count($filter) ?> kata</td>
+      </tr>
+    </tbody>
+  </table>
+
+  Hasil Tokenisasi, Filtering Stemming Adalah:<h4 style="display: inline"> <?= $kalimat ?></h4>
 
 </html>

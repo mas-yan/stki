@@ -2,30 +2,31 @@
     "packages": [
         {
             "name": "sastrawi/sastrawi",
-            "version": "v1.0.0",
-            "version_normalized": "1.0.0.0",
+            "version": "v1.2.0",
+            "version_normalized": "1.2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sastrawi/sastrawi.git",
-                "reference": "fd3cd29e46954b2c8f24dc95f029ce233871d2ef"
+                "reference": "31fd4261dd4980cc57447f44d1aec4bd69e2abec"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sastrawi/sastrawi/zipball/fd3cd29e46954b2c8f24dc95f029ce233871d2ef",
-                "reference": "fd3cd29e46954b2c8f24dc95f029ce233871d2ef",
+                "url": "https://api.github.com/repos/sastrawi/sastrawi/zipball/31fd4261dd4980cc57447f44d1aec4bd69e2abec",
+                "reference": "31fd4261dd4980cc57447f44d1aec4bd69e2abec",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3"
             },
             "require-dev": {
-                "squizlabs/php_codesniffer": "1.4.*"
+                "phpunit/phpunit": "4.8.7",
+                "squizlabs/php_codesniffer": "~1.0"
             },
-            "time": "2014-07-20T05:15:07+00:00",
+            "time": "2016-10-22T03:19:27+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.0.x-dev"
+                    "dev-master": "1.1.x-dev"
                 }
             },
             "installation-source": "dist",
@@ -42,7 +43,7 @@
                 {
                     "name": "Andy Librian",
                     "email": "andylibrian@gmail.com",
-                    "homepage": "http://andylibrian.pro",
+                    "homepage": "http://andylibrian.com",
                     "role": "Lead Developer"
                 }
             ],

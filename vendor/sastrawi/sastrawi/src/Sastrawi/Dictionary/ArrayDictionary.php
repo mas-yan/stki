@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Sastrawi (https://github.com/sastrawi/sastrawi)
  *
@@ -35,7 +34,7 @@ class ArrayDictionary implements DictionaryInterface
     /**
      * {@inheritdoc}
      */
-    public function count(): Int
+    public function count()
     {
         return count($this->words);
     }
@@ -66,5 +65,28 @@ class ArrayDictionary implements DictionaryInterface
         }
 
         $this->words[$word] = $word;
+    }
+
+    /**
+     * Remove a word from the dictionary
+     *
+     * @param  string $word
+     * @return void
+     */
+    public function remove($word)
+    {
+        unset($this->words[$word]);
+    }
+
+    /**
+     * Add words from a text file to the dictionary
+     *
+     * @param  string $word
+     * @return void
+     */
+    public function addWordsFromTextFile($filePath, $delimiter = "\n")
+    {
+        $words = explode($delimiter, file_get_contents($filePath));
+        $this->addWords($words);
     }
 }
