@@ -10,23 +10,30 @@
 </head>
 
 <body>
-  <form action="" method="POST" class="mb-3">
-    <div class="mb-3">
-      <input placeholder="Masukkan Kalimat" type="text" name="isi" class="form-control">
-    </div>
-    <button class="btn-success btn" name="prostambahes">tambah</button>
-  </form>
+  <div class="container">
+
+    <form action="" method="POST" class="my-3">
+      <div class="mb-3">
+        <input placeholder="Masukkan Kalimat" type="text" name="isi" class="form-control">
+      </div>
+      <button class="btn-success btn" name="tambah">tambah</button>
+    </form>
+  </div>
 
   <?php
   $conn = mysqli_connect('localhost', 'root', '', 'stki');
 
   if (isset($_POST['tambah'])) {
-    mysqli_query($conn, 'INSERT INTO korpus (isi)
-  VALUES ("' . $_POST['isi'] . '")') or die(mysqli_error($conn));
+    mysqli_query($conn, 'INSERT INTO korpus (isi,document)
+  VALUES ("' . $_POST['isi'] . '","d1")') or die(mysqli_error($conn));
   }
   $x = mysqli_query($conn, "SELECT * FROM korpus");
-  $words = mysqli_fetch_array($x);
-  $words = ["Menko polhukam Mahfud md menyatakan pengelolaan otonomi khusus (otsus) papua tidak beres. karenanya, dana otsus dinaikkan menjadi 2,25 persen dari dana alokasi khusus apbn", "Piala Dunia 2022 telah memasuki fase semifinal. Seluruh pertandingan digelar tengah pekan ini. Berikut jadwal selengkapnya! Empat tim sudah memastikan tiket ke semifinal Piala Dunia 2022. Keempatnya antara lain Kroasia, Argentina, Maroko, dan Prancis.Kroasia lolos usai menumbangkan tim unggulan Brasil lewat drama adu penalti. Proses serupa turut dilalui Argentina yang mendepak Belanda di perempatfinal"];
+  // $words = mysqli_fetch_array($x);
+  $words = ['ilmu manajemen'];
+  if (!$words) {
+    $words = [];
+  }
+  // $words = ["Menko polhukam Mahfud md menyatakan pengelolaan otonomi khusus (otsus) papua tidak beres. karenanya, dana otsus dinaikkan menjadi 2,25 persen dari dana alokasi khusus apbn", "Piala Dunia 2022 telah memasuki fase semifinal. Seluruh pertandingan digelar tengah pekan ini. Berikut jadwal selengkapnya! Empat tim sudah memastikan tiket ke semifinal Piala Dunia 2022. Keempatnya antara lain Kroasia, Argentina, Maroko, dan Prancis.Kroasia lolos usai menumbangkan tim unggulan Brasil lewat drama adu penalti. Proses serupa turut dilalui Argentina yang mendepak Belanda di perempatfinal"];
   $number = 1;
   foreach ($words as $word) :
 
@@ -134,6 +141,10 @@
         </div>
       </div>
     </div>
+
+    
+
+
 
 </html>
 
