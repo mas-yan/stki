@@ -1,6 +1,8 @@
+<?php 
+include 'koneksi.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,144 +10,105 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
   <title>Document</title>
 </head>
-
 <body>
-  <div class="container">
-
-    <form action="" method="POST" class="my-3">
-      <div class="mb-3">
-        <input placeholder="Masukkan Kalimat" type="text" name="isi" class="form-control">
-      </div>
-      <button class="btn-success btn" name="tambah">tambah</button>
-    </form>
-  </div>
-
-  <?php
-  $conn = mysqli_connect('localhost', 'root', '', 'stki');
-
-  if (isset($_POST['tambah'])) {
-    mysqli_query($conn, 'INSERT INTO korpus (isi,document)
-  VALUES ("' . $_POST['isi'] . '","d1")') or die(mysqli_error($conn));
-  }
-  $x = mysqli_query($conn, "SELECT * FROM korpus");
-  // $words = mysqli_fetch_array($x);
-  $words = ['ilmu manajemen'];
-  if (!$words) {
-    $words = [];
-  }
-  // $words = ["Menko polhukam Mahfud md menyatakan pengelolaan otonomi khusus (otsus) papua tidak beres. karenanya, dana otsus dinaikkan menjadi 2,25 persen dari dana alokasi khusus apbn", "Piala Dunia 2022 telah memasuki fase semifinal. Seluruh pertandingan digelar tengah pekan ini. Berikut jadwal selengkapnya! Empat tim sudah memastikan tiket ke semifinal Piala Dunia 2022. Keempatnya antara lain Kroasia, Argentina, Maroko, dan Prancis.Kroasia lolos usai menumbangkan tim unggulan Brasil lewat drama adu penalti. Proses serupa turut dilalui Argentina yang mendepak Belanda di perempatfinal"];
-  $number = 1;
-  foreach ($words as $word) :
-
-    // menghilangkan angka dan tanda baca
-    $data = preg_replace('/[^a-z]+/i', ' ', $data = preg_replace('/[0-9]+/', '', strtolower($word)));
-
-    // jadikan array
-    $data = explode(" ", $data);
-
-
-    // stopword tala
-    $stopword = ["ada", "adalah", "adanya", "adapun", "agak", "agaknya", "agar", "akan", "akankah", "akhir", "akhiri", "akhirnya", "aku", "akulah", "amat", "amatlah", "anda", "andalah", "antar", "antara", "antaranya", "apa", "apaan", "apabila", "apakah", "apalagi", "apatah", "artinya", "asal", "asalkan", "atas", "atau", "ataukah", "ataupun", "awal", "awalnya", "bagai", "bagaikan", "bagaimana", "bagaimanakah", "bagaimanapun", "bagi", "bagian", "bahkan", "bahwa", "bahwasanya", "baik", "bakal", "bakalan", "balik", "banyak", "bapak", "baru", "bawah", "beberapa", "begini", "beginian", "beginikah", "beginilah", "begitu", "begitukah", "begitulah", "begitupun", "bekerja", "belakang", "belakangan", "belum", "belumlah", "benar", "benarkah", "benarlah", "berada", "berakhir", "berakhirlah", "berakhirnya", "berapa", "berapakah", "berapalah", "berapapun", "berarti", "berawal", "berbagai", "berdatangan", "beri", "berikan", "berikut", "berikutnya", "berjumlah", "berkali-kali", "berkata", "berkehendak", "berkeinginan", "berkenaan", "berlainan", "berlalu", "berlangsung", "berlebihan", "bermacam", "bermacam-macam", "bermaksud", "bermula", "bersama", "bersama-sama", "bersiap", "bersiap-siap", "bertanya", "bertanya-tanya", "berturut", "berturut-turut", "bertutur", "berujar", "berupa", "besar", "betul", "betulkah", "biasa", "biasanya", "bila", "bilakah", "bisa", "bisakah", "boleh", "bolehkah", "bolehlah", "buat", "bukan", "bukankah", "bukanlah", "bukannya", "bulan", "bung", "cara", "caranya", "cukup", "cukupkah", "cukuplah", "cuma", "dahulu", "dalam", "dan", "dapat", "dari", "daripada", "datang", "dekat", "demi", "demikian", "demikianlah", "dengan", "depan", "di", "dia", "diakhiri", "diakhirinya", "dialah", "diantara", "diantaranya", "diberi", "diberikan", "diberikannya", "dibuat", "dibuatnya", "didapat", "didatangkan", "digunakan", "diibaratkan", "diibaratkannya", "diingat", "diingatkan", "diinginkan", "dijawab", "dijelaskan", "dijelaskannya", "dikarenakan", "dikatakan", "dikatakannya", "dikerjakan", "diketahui", "diketahuinya", "dikira", "dilakukan", "dilalui", "dilihat", "dimaksud", "dimaksudkan", "dimaksudkannya", "dimaksudnya", "diminta", "dimintai", "dimisalkan", "dimulai", "dimulailah", "dimulainya", "dimungkinkan", "dini", "dipastikan", "diperbuat", "diperbuatnya", "dipergunakan", "diperkirakan", "diperlihatkan", "diperlukan", "diperlukannya", "dipersoalkan", "dipertanyakan", "dipunyai", "diri", "dirinya", "disampaikan", "disebut", "disebutkan", "disebutkannya", "disini", "disinilah", "ditambahkan", "ditandaskan", "ditanya", "ditanyai", "ditanyakan", "ditegaskan", "ditujukan", "ditunjuk", "ditunjuki", "ditunjukkan", "ditunjukkannya", "ditunjuknya", "dituturkan", "dituturkannya", "diucapkan", "diucapkannya", "diungkapkan", "dong", "dua", "dulu", "empat", "enggak", "enggaknya", "entah", "entahlah", "guna", "gunakan", "hal", "hampir", "hanya", "hanyalah", "hari", "harus", "haruslah", "harusnya", "hendak", "hendaklah", "hendaknya", "hingga", "ia", "ialah", "ibarat", "ibaratkan", "ibaratnya", "ibu", "ikut", "ingat", "ingat-ingat", "ingin", "inginkah", "inginkan", "ini", "inikah", "inilah", "itu", "itukah", "itulah", "jadi", "jadilah", "jadinya", "jangan", "jangankan", "janganlah", "jauh", "jawab", "jawaban", "jawabnya", "jelas", "jelaskan", "jelaslah", "jelasnya", "jika", "jikalau", "juga", "jumlah", "jumlahnya", "justru", "kala", "kalau", "kalaulah", "kalaupun", "kalian", "kami", "kamilah", "kamu", "kamulah", "kan", "kapan", "kapankah", "kapanpun", "karena", "karenanya", "kasus", "kata", "katakan", "katakanlah", "katanya", "ke", "keadaan", "kebetulan", "kecil", "kedua", "keduanya", "keinginan", "kelamaan", "kelihatan", "kelihatannya", "kelima", "keluar", "kembali", "kemudian", "kemungkinan", "kemungkinannya", "kenapa", "kepada", "kepadanya", "kesampaian", "keseluruhan", "keseluruhannya", "keterlaluan", "ketika", "khususnya", "kini", "kinilah", "kira", "kira-kira", "kiranya", "kita", "kitalah", "kok", "kurang", "lagi", "lagian", "lah", "lain", "lainnya", "lalu", "lama", "lamanya", "lanjut", "lanjutnya", "lebih", "lewat", "lima", "luar", "macam", "maka", "makanya", "makin", "malah", "malahan", "mampu", "mampukah", "mana", "manakala", "manalagi", "masa", "masalah", "masalahnya", "masih", "masihkah", "masing", "masing-masing", "mau", "maupun", "melainkan", "melakukan", "melalui", "melihat", "melihatnya", "memang", "memastikan", "memberi", "memberikan", "membuat", "memerlukan", "memihak", "meminta", "memintakan", "memisalkan", "memperbuat", "mempergunakan", "memperkirakan", "memperlihatkan", "mempersiapkan", "mempersoalkan", "mempertanyakan", "mempunyai", "memulai", "memungkinkan", "menaiki", "menambahkan", "menandaskan", "menanti", "menanti-nanti", "menantikan", "menanya", "menanyai", "menanyakan", "mendapat", "mendapatkan", "mendatang", "mendatangi", "mendatangkan", "menegaskan", "mengakhiri", "mengapa", "mengatakan", "mengatakannya", "mengenai", "mengerjakan", "mengetahui", "menggunakan", "menghendaki", "mengibaratkan", "mengibaratkannya", "mengingat", "mengingatkan", "menginginkan", "mengira", "mengucapkan", "mengucapkannya", "mengungkapkan", "menjadi", "menjawab", "menjelaskan", "menuju", "menunjuk", "menunjuki", "menunjukkan", "menunjuknya", "menurut", "menuturkan", "menyampaikan", "menyangkut", "menyatakan", "menyebutkan", "menyeluruh", "menyiapkan", "merasa", "mereka", "merekalah", "merupakan", "meski", "meskipun", "meyakini", "meyakinkan", "minta", "mirip", "misal", "misalkan", "misalnya", "mula", "mulai", "mulailah", "mulanya", "mungkin", "mungkinkah", "nah", "naik", "namun", "nanti", "nantinya", "nyaris", "nyatanya", "oleh", "olehnya", "pada", "padahal", "padanya", "pak", "paling", "panjang", "pantas", "para", "pasti", "pastilah", "penting", "pentingnya", "per", "percuma", "perlu", "perlukah", "perlunya", "pernah", "persoalan", "pertama", "pertama-tama", "pertanyaan", "pertanyakan", "pihak", "pihaknya", "pukul", "pula", "pun", "punya", "rasa", "rasanya", "rata", "rupanya", "saat", "saatnya", "saja", "sajalah", "saling", "sama", "sama-sama", "sambil", "sampai", "sampai-sampai", "sampaikan", "sana", "sangat", "sangatlah", "satu", "saya", "sayalah", "se", "sebab", "sebabnya", "sebagai", "sebagaimana", "sebagainya", "sebagian", "sebaik", "sebaik-baiknya", "sebaiknya", "sebaliknya", "sebanyak", "sebegini", "sebegitu", "sebelum", "sebelumnya", "sebenarnya", "seberapa", "sebesar", "sebetulnya", "sebisanya", "sebuah", "sebut", "sebutlah", "sebutnya", "secara", "secukupnya", "sedang", "sedangkan", "sedemikian", "sedikit", "sedikitnya", "seenaknya", "segala", "segalanya", "segera", "seharusnya", "sehingga", "seingat", "sejak", "sejauh", "sejenak", "sejumlah", "sekadar", "sekadarnya", "sekali", "sekali-kali", "sekalian", "sekaligus", "sekalipun", "sekarang", "sekarang", "sekecil", "seketika", "sekiranya", "sekitar", "sekitarnya", "sekurang-kurangnya", "sekurangnya", "sela", "selain", "selaku", "selalu", "selama", "selama-lamanya", "selamanya", "selanjutnya", "seluruh", "seluruhnya", "semacam", "semakin", "semampu", "semampunya", "semasa", "semasih", "semata", "semata-mata", "semaunya", "sementara", "semisal", "semisalnya", "sempat", "semua", "semuanya", "semula", "sendiri", "sendirian", "sendirinya", "seolah", "seolah-olah", "seorang", "sepanjang", "sepantasnya", "sepantasnyalah", "seperlunya", "seperti", "sepertinya", "sepihak", "sering", "seringnya", "serta", "serupa", "sesaat", "sesama", "sesampai", "sesegera", "sesekali", "seseorang", "sesuatu", "sesuatunya", "sesudah", "sesudahnya", "setelah", "setempat", "setengah", "seterusnya", "setiap", "setiba", "setibanya", "setidak-tidaknya", "setidaknya", "setinggi", "seusai", "sewaktu", "siap", "siapa", "siapakah", "siapapun", "sini", "sinilah", "soal", "soalnya", "suatu", "sudah", "sudahkah", "sudahlah", "supaya", "tadi", "tadinya", "tahu", "tahun", "tak", "tambah", "tambahnya", "tampak", "tampaknya", "tandas", "tandasnya", "tanpa", "tanya", "tanyakan", "tanyanya", "tapi", "tegas", "tegasnya", "telah", "tempat", "tengah", "tentang", "tentu", "tentulah", "tentunya", "tepat", "terakhir", "terasa", "terbanyak", "terdahulu", "terdapat", "terdiri", "terhadap", "terhadapnya", "teringat", "teringat-ingat", "terjadi", "terjadilah", "terjadinya", "terkira", "terlalu", "terlebih", "terlihat", "termasuk", "ternyata", "tersampaikan", "tersebut", "tersebutlah", "tertentu", "tertuju", "terus", "terutama", "tetap", "tetapi", "tiap", "tiba", "tiba-tiba", "tidak", "tidakkah", "tidaklah", "tiga", "tinggi", "toh", "tunjuk", "turut", "tutur", "tuturnya", "ucap", "ucapnya", "ujar", "ujarnya", "umum", "umumnya", "ungkap", "ungkapnya", "untuk", "usah", "usai", "waduh", "wah", "wahai", "waktu", "waktunya", "walau", "walaupun", "wong", "yaitu", "yakin", "yakni", "yang"];
-  ?>
-    <div class="container my-5">
-      <div class="alert alert-success">
-        <p><span class="fw-bold">Kalimat <?= $number++ ?>: </span><?= $word ?></p>
-      </div>
-      <div class="row">
-        <div class="col-6">
-          <div class="card shadow rounded-md">
-            <div class="card-body">
-              <h3>Tokenisasi</h3>
-              <table class="table table-striped">
-                <tbody>
-                  <?php foreach ($data as $key => $value) : ?>
-                    <tr>
-                      <td><?= $key + 1 ?></td>
-                      <td><?= $value ?></td>
-                    </tr>
-                  <?php endforeach ?>
-                  <tr>
-                    <td></td>
-                    <td>Jumlah: <?= count($data) ?> kata</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+    <div class="container my-3">
+        <?php 
+        if (isset($_POST['tambah'])) {
+            $insert = mysqli_query($conn, 'INSERT INTO korpus (judul,isi,document)
+            VALUES ("' . $_POST['judul'] . '","' . $_POST['isi'] . '","' . $_POST['document'] . '")') or die(mysqli_error($conn));
+            if ($insert) {
+                header("location:index.php?pesan=input");
+            }else{
+                header("location:index.php?pesan=inputfail");
+            }
+          }
+        ?>
+        <?php 
+        if (isset($_GET['pesan'])) :?>
+            <?php 
+            if ($_GET['pesan'] == 'input') {
+                echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>Berhasil Ditambahkan!</strong> Data korpus berhasil ditambahkan.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>';
+            }elseif (isset($_GET['inputfail'])){
+                echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong>Gagal Ditambahkan!</strong> Data korpus Gagal ditambahkan.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>';
+            }
+            ?>
+        <?php endif ?>
+    <form action="" method="POST">
+          <div class="mb-3">
+            <input placeholder="Masukkan Judul" type="text" name="judul" class="form-control">
           </div>
-        </div>
-        <div class="col-6">
-          <div class="card shadow rounded-md">
-            <div class="card-body">
-              <h3>Filtering</h3>
-
-              <?php
-
-              // hilangkan kata jika ada yg sama dengan stopword
-              $filter = array_diff($data, $stopword);
-
-              ?>
-              <table class="table table-striped">
-                <tbody>
-                  <?php $no = 1;
-                  foreach ($filter as $value) : ?>
-                    <tr>
-                      <td><?= $no++ ?></td>
-                      <td><?= $value ?></td>
-                    </tr>
-                  <?php endforeach ?>
-                  <tr>
-                    <td>total: </td>
-                    <td><?= count($filter) ?> kata</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+          <div class="mb-3">
+            <input placeholder="Masukkan Kalimat" type="text" name="isi" class="form-control">
           </div>
-        </div>
-      </div>
+          <div class="mb-3">
+            <input placeholder="Masukkan Document" type="text" name="document" class="form-control">
+          </div>
+          <button class="btn-success btn" name="tambah">tambah</button>
+        </form>
     </div>
 
-    <?php
-    // menggunakan library sastrawi untuk stemming
-    require_once __DIR__ . '/vendor/autoload.php';
-    $stemmerFactory = new \Sastrawi\Stemmer\StemmerFactory();
-
-    $dictionary = $stemmerFactory->createStemmer();
-
-    $kalimat = implode(" ", $filter);
-    $stemmer = $dictionary->stem($kalimat);
-    $stemming = explode(" ", $stemmer);
-    ?>
-    <div class="container mb-5">
-      <div class="card shadow rounded-md mt-5">
-        <div class="card-body">
-          <h3>Stemming</h3>
-          <table class="table table-striped">
-            <tbody>
-              <?php $no = 1;
-              foreach ($stemming as $value) : ?>
-                <tr>
-                  <td><?= $no++ ?></td>
-                  <td><?= $value ?></td>
-                </tr>
-              <?php endforeach ?>
-              <tr>
-                <td>total: </td>
-                <td><?= count($filter) ?> kata</td>
-              </tr>
-            </tbody>
-          </table>
-
-          Hasil Tokenisasi, Filtering Stemming Adalah:<h4 style="display: inline"> <?= $stemmer ?></h4>
-
-        </div>
-      </div>
-    </div>
-
+    <?php 
+        $query = mysqli_query($conn, "SELECT * FROM korpus");
     
+        
+    ?>
+    <!-- tampilkan data -->
+    <div class="container my-5">
+        <div class="table-resposnsive">
+            <table class="table table-hover table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Judul</th>
+                        <th>isi</th>
+                        <th>document</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php 
+                        if ($query->num_rows > 0) :
+                        $number = 1;
+                        while ($word = mysqli_fetch_assoc($query)) :
+                        // menghilangkan angka dan tanda baca
+                        $data = preg_replace('/[^a-z]+/i', ' ', $data = preg_replace('/[0-9]+/', '', strtolower($word['isi'])));
+                    
+                        // jadikan array
+                        $data = explode(" ", $data);
+                     ?>
+                    <tr>
+                        <td><?= $number++ ?></td>
+                        <td><?= $word['judul'] ?></td>
+                        <td>
+                            <span class="d-inline-block text-truncate" style="max-width: 150px;">
+                                <?= $word['isi'] ?>
+                            </span>    
+                        </td>
+                        <td><?= $word['document'] ?></td>
+                        <td>
+                            <a href="controller.php?document=<?= $word['document'] ?>" class="btn btn-primary">Lihat Process</a></td>
+                    </tr>
+                    <?php endwhile; ?>
+                    <?php else: ?>
+                        <tr>
+                            <td colspan="5" class="text-center">Belum Ada Data</td>
+                        </tr>
+                    <?php
+                        endif;
+                    ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
-
+</body>
 </html>
-
-<?php endforeach; ?>
+<!-- input -->

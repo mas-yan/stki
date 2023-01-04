@@ -64,27 +64,29 @@
       return idf($resDf,$dataTf);
     }
       
-      function idf($resDf, $dataTf)
-      {
-        $idf = [];
-        foreach ($resDf as $key => $resVal) {
-          $idf[$key] = log10($resVal);
-        }
-
-        $p = [];
-        foreach ($dataTf as $key => $value) {
-          $w = [];
-          foreach ($value['tf'] as $key => $tf) {
-            $w[$key] = $idf[$key] * $tf;
-          }
-          $p[] = [
-            'Document' => $value['document'],
-            'idf' => $w
-          ];
-        }
-
-        return $p;
+    function idf($resDf, $dataTf)
+    {
+      $idf = [];
+      foreach ($resDf as $key => $resVal) {
+        $idf[$key] = log10($resVal);
       }
-      
-      header("Content-Type: application/json");
-      echo json_encode(tf($dataTf));
+
+      $result = [];
+      foreach ($dataTf as $key => $value) {
+        $w = [];
+        foreach ($value['tf'] as $key => $tf) {
+          $w[$key] = $idf[$key] * $tf;
+        }
+        $result[] = [
+          'Document' => $value['document'],
+          'idf' => $w
+        ];
+      }
+
+      return json_encode($result);
+    }
+    header("Content-Type: application/json");
+    echo tf($dataTf);
+
+
+    // $words = ["Menko polhukam Mahfud md menyatakan pengelolaan otonomi khusus (otsus) papua tidak beres. karenanya, dana otsus dinaikkan menjadi 2,25 persen dari dana alokasi khusus apbn", "Piala Dunia 2022 telah memasuki fase semifinal. Seluruh pertandingan digelar tengah pekan ini. Berikut jadwal selengkapnya! Empat tim sudah memastikan tiket ke semifinal Piala Dunia 2022. Keempatnya antara lain Kroasia, Argentina, Maroko, dan Prancis.Kroasia lolos usai menumbangkan tim unggulan Brasil lewat drama adu penalti. Proses serupa turut dilalui Argentina yang mendepak Belanda di perempatfinal"];
