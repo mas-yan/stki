@@ -216,7 +216,8 @@ if (isset($_POST['submit'])) {
   endif;
   include 'koneksi.php';
   $document = '(' . implode(',', $d) .')';
-    $query = mysqli_query($conn, "SELECT * FROM korpus where document IN $document") or die(mysqli_error($conn));
+  $order = implode(',',$d);
+    $query = mysqli_query($conn, "SELECT * FROM korpus where document IN $document order by FIELD(document,$order)") or die(mysqli_error($conn));
 
     if ($query->num_rows > 0) {
         while ($word = mysqli_fetch_assoc($query)) :?>
@@ -230,10 +231,7 @@ if (isset($_POST['submit'])) {
         <?php
         endwhile;
     }
-    // echo $document;
 }
-// header("Content-Type: application/json");
-// print_r(json_encode(main($cari), true));
 ?>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
