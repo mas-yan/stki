@@ -26,7 +26,7 @@
       ],
     ];
 
-    function tf($dataTf)
+    function df($dataTf)
     {
       $arrayKey  = [];
       foreach ($dataTf as $item) {
@@ -37,11 +37,11 @@
         }
       }
 
-      return df($arrayKey, $dataTf);
+      return ddf($arrayKey, $dataTf);
     }
 
       
-    function df($arrayKey, $dataTf)
+    function ddf($arrayKey, $dataTf)
     {
       $df = [];
       foreach ($arrayKey as $key) {
@@ -78,15 +78,53 @@
           $w[$key] = $idf[$key] * $tf;
         }
         $result[] = [
-          'Document' => $value['document'],
+          'document' => $value['document'],
           'idf' => $w
         ];
       }
 
-      return json_encode($result);
+      return result($result);
     }
+
+    function result($data)
+    {
+      $kk = strtolower("Pengetahuan Logistik");
+      $kk = explode(" ",$kk);
+
+      $newDataTf = [];
+      foreach ($data as $item) {
+          $newItem = [
+              'document' => $item['document'],
+              'idf' => []
+          ];
+          $sum = 0;
+          foreach ($item['idf'] as $key => $idf) {
+              if (in_array($key, $kk)) {
+                  $sum += $idf;
+              }
+          }
+          $result[$item['document']] = $sum;
+      }
+      arsort($result);
+      return $result;
+    }
+    include 'koneksi.php';
     header("Content-Type: application/json");
-    echo tf($dataTf);
-
-
-    // $words = ["Menko polhukam Mahfud md menyatakan pengelolaan otonomi khusus (otsus) papua tidak beres. karenanya, dana otsus dinaikkan menjadi 2,25 persen dari dana alokasi khusus apbn", "Piala Dunia 2022 telah memasuki fase semifinal. Seluruh pertandingan digelar tengah pekan ini. Berikut jadwal selengkapnya! Empat tim sudah memastikan tiket ke semifinal Piala Dunia 2022. Keempatnya antara lain Kroasia, Argentina, Maroko, dan Prancis.Kroasia lolos usai menumbangkan tim unggulan Brasil lewat drama adu penalti. Proses serupa turut dilalui Argentina yang mendepak Belanda di perempatfinal"];
+    print_r(df($dataTf));
+    include 'koneksi.php';
+    $document = '(' . implode(',', $d) .')';
+      $query = mysqli_query($conn, "SELECT * FROM korpus where document IN $document") or die(mysqli_error($conn));
+  
+      if ($query->num_rows > 0) {
+          while ($word = mysqli_fetch_assoc($query)) :?>
+          <div class="container">
+            <div class="list-group">
+              <a href="#" class="list-group-item list-group-item-action" aria-current="true">
+                <?= $word['isi'] ?>
+                <?= print_r($d) ?>
+              </a>
+            </div>
+          </div>
+          <?php
+          endwhile;
+      }
